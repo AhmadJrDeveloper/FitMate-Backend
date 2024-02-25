@@ -9,7 +9,8 @@ import ExerciseRouter from './routes/exerciseRoute';
 import UserRouter from './routes/userRoute';
 import GoalRouter from './routes/goalRoute';
 import ScheduleRouter from './routes/scheduleRoute';
-
+import cookieParser from 'cookie-parser';
+import { authenticate } from './middleware/auth';
 dotenv.config();
 
 const app: Express = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 app.use(cors());
+app.use(cookieParser())
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     console.log(`//${req.method} ${req.path} `);
@@ -47,7 +49,7 @@ httpServer.listen(process.env.PORT, () => {
 
 
 app.use('/admins',AdminRouter);
-app.use('/categories',CategoryRouter);
+app.use('/categories',authenticate,CategoryRouter);
 app.use('/exercises', ExerciseRouter);
 app.use('/users', UserRouter);
 app.use('/goals', GoalRouter);
