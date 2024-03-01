@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Exercise from "../models/exerciseModel";
+import Category from "../models/categoryModel";
 import fs from 'fs';
 
 
@@ -114,7 +115,34 @@ export default class ExerciseController {
       res.status(500).json({ error: "Internal Server Error", err: error.message });
     }
   };
-  
+
+  static getExercisesByCategory = async (req: Request, res: Response): Promise<void> => {
+    const { categoryName } = req.params;
+    console.log(categoryName);
+     
+    try {
+       // Find category by name
+       const category = await Category.findOne({ name: categoryName });
+       
+       if (!category) {
+         res.status(404).json({ message: "Category not found" });
+         return;
+       }
+
+       // Find exercises by category ID
+       const exercises = await Exercise.find({ category: category._id }).populate('category');
+       
+       if (exercises.length === 0) {
+         res.status(404).json({ message: "No exercises found for the given category" });
+         return;
+       }
+   
+       res.status(200).json(exercises);
+    } catch (error: any) {
+       res.status(500).json({ error: "Internal Server Error", err: error.message });
+    }
+   };
+   
   
   
 

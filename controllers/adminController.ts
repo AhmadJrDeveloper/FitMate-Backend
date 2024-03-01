@@ -132,7 +132,7 @@ export default class AdminController {
 
       // Sign and generate a JWT token
       const token = jwt.sign(
-        { id: admin._id, username: admin.username, type: admin.type },
+        { id: admin._id, username: admin.username, type: admin.type,firstName: admin.firstName, lastName: admin.lastName},
         process.env.SECRET_STRING,
         { expiresIn: "24h" }
       );

@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import ExerciseController from "../controllers/exerciseController";
 import upload from "../middleware/multer";
 const ExerciseRouter: Router = express.Router();
+ExerciseRouter.get("/exercise/:categoryName", ExerciseController.getExercisesByCategory);
 
 ExerciseRouter.post("", upload.single('gif'), ExerciseController.createExercise);
 ExerciseRouter.get("/", ExerciseController.readExercise);

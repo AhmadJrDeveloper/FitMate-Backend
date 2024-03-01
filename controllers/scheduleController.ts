@@ -30,20 +30,26 @@ export default class ScheduleController {
 
   static readOneSchedule = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-
+    console.log(id);
+  
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({ data: null, message: "not found", status: 404 });
+      res.status(404).json({ data: null, message: "User ID is invalid", status: 404 });
       return;
     }
-
-    const schedule = await Schedule.findById(id).populate('user');
-    if (!schedule) {
-      res.status(404).json({ data: null, message: "not found", status: 404 });
-      return;
+  
+    try {
+      const schedule = await Schedule.find({ user: id }).populate('user');
+      if (!schedule) {
+        res.status(404).json({ data: null, message: "Schedule not found for the given user ID", status: 404 });
+        return;
+      }
+  
+      res.status(200).json({ data: schedule, message: "Success", status: 200 });
+    } catch (error: any) {
+      res.status(500).json({ error: "Internal Server Error", errorMessage: error.message });
     }
-
-    res.status(200).json({ data: schedule, message: "succes", status: 200 });
   };
+  
 
   static updateSchedule = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
