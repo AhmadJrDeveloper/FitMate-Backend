@@ -19,8 +19,10 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
-app.use(cors());
-app.use(cookieParser());
+app.use(cors({
+   origin: "*"
+ }));
+ app.use(cookieParser());
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     console.log(`//${req.method} ${req.path} `);
