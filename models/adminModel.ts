@@ -22,6 +22,16 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: ["trainer", "admin"]
+      },
+      image:{
+        type: String,
+        required: true
+      },
+      insta:{
+        type: String,
+      },
+      facebook:{
+        type: String,
       }
 });
 

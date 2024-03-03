@@ -10,7 +10,7 @@ dotenv.config();
 
 export default class UserController {
   static createUser = async (req: Request, res: Response): Promise<void> => {
-    const { username,firstName,lastName, password,  dob } = req.body;
+    const { username,firstName,lastName, password } = req.body;
 
     try {
       // Check if the username or email already exists
@@ -32,7 +32,7 @@ export default class UserController {
         password: hashedPassword,
         firstName,
         lastName,
-        dob,
+      
       });
 
       res.status(200).json(user);
@@ -132,7 +132,7 @@ export default class UserController {
 
       // Sign and generate a JWT token
       const token = jwt.sign(
-        { id: user._id, username: user.username },
+        { id: user._id, username: user.username,firstName: user.firstName,lastName: user.lastName},
         process.env.SECRET_STRING,
         { expiresIn: "24h" }
       );

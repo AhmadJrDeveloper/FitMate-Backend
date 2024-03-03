@@ -10,7 +10,8 @@ dotenv.config();
 
 export default class AdminController {
   static createAdmin = async (req: Request, res: Response): Promise<void> => {
-    const { username,firstName,lastName, password,  type } = req.body;
+    const { username,firstName,lastName, password,  type,insta,facebook } = req.body;
+    const file = req.file;
 
     try {
       // Check if the username or email already exists
@@ -23,7 +24,11 @@ export default class AdminController {
         res.status(400).json({ error: "Username already exists" });
         return;
       }
-
+      console.log("the fileee",file);
+      if (!file) {
+        res.status(400).json({ error: "No file was uploaded" });
+        return;
+      }
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // If username and email are unique, create the new user
@@ -33,6 +38,8 @@ export default class AdminController {
         firstName,
         lastName,
         type,
+        image:file.filename,
+        insta,facebook
       });
 
       res.status(200).json(admin);
@@ -70,7 +77,8 @@ export default class AdminController {
 
   static updateAdmin = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
-    const { username, firstName, lastName, password, type } = req.body;
+    const { username, firstName, lastName, password, type, insta, facebook } = req.body;
+    const file = req.file; // Get the uploaded file
   
     try {
       const updateFields: any = {}; // Initialize an empty object to store fields to update
@@ -79,6 +87,17 @@ export default class AdminController {
       if (username) updateFields.username = username;
       if (firstName) updateFields.firstName = firstName;
       if (lastName) updateFields.lastName = lastName;
+      if (insta) updateFields.insta = insta;
+      if (facebook) updateFields.facebook = facebook;
+  
+      if (file) {
+        // If a file is uploaded, update the image field
+        updateFields.image = file.filename;
+      }
+
+      console.log(file);
+      
+  
       if (password) {
         // Hash the new password if provided
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -100,6 +119,7 @@ export default class AdminController {
       res.status(400).json({ error: error.message });
     }
   };
+  
   
 
   static deleteAdmin = async (req: Request, res: Response): Promise<void> => {

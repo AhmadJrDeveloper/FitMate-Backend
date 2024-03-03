@@ -65,7 +65,7 @@ ioInstance.on('connection', (socket) => {
 
  socket.on('send_message', (data) => {
     socket.to(data.room).emit('recive_message', data);
-    socket.emit('recive_message', data); // Echo the message back to the sender
+    socket.emit('recive_message', data);
  });
 
  socket.on('disconnect', () => {
