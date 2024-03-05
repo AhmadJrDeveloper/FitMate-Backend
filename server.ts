@@ -54,7 +54,7 @@ httpServer.listen(4000, () => {
 
 const ioInstance = new SocketIOServer(httpServer, {
  cors: {
-      origin: "http://localhost:5173",
+      origin: "*",
       methods: ["GET", "POST"]
  }
 });
